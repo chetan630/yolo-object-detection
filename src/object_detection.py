@@ -8,6 +8,7 @@ score. Press 'Q' to quit.
 
 import hashlib
 import platform
+import statistics
 import sys
 import time
 from typing import Optional
@@ -19,40 +20,24 @@ from ultralytics.engine.results import Results
 # ===========================================================
 # CONFIGURATION
 # ===========================================================
-# Kept as simple module-level constants rather than a separate
-# config file/class — this is a small single-purpose script, so a
-# dedicated config layer would add indirection without real benefit.
-# Everything a user is likely to want to change lives here.
 
-# Model choice:
-#   "yolov8n.pt" -> fastest, lowest accuracy (nano)
-#   "yolov8s.pt" -> small, noticeably better accuracy, still real-time
-#                   on a normal CPU laptop
-#   "yolov8m.pt" -> medium, most accurate of these three, but slower
-#                   on CPU-only machines (may drop below real-time)
 MODEL_NAME = "yolov8s.pt"
 
-# Minimum confidence required to display a detection (0.0 - 1.0).
 CONFIDENCE_THRESHOLD = 0.4
 
-# IoU (Intersection over Union) threshold used for Non-Max Suppression.
-# Lower values remove more overlapping/duplicate boxes for the same
-# object; higher values allow more overlapping boxes to survive.
 IOU_THRESHOLD = 0.45
 
-# Requested camera capture resolution. Higher resolution gives YOLO
-# more detail to work with, which generally improves detection
-# accuracy at the cost of some FPS.
 FRAME_WIDTH = 1280
 FRAME_HEIGHT = 720
 
-# Number of camera indexes to probe when listing available cameras.
 MAX_CAMERAS_TO_CHECK = 5
 
-# Smoothing factor for the exponential moving average used in the
-# FPS display. Closer to 1.0 = smoother/slower to react; closer to
-# 0.0 = noisier/faster to react. 0.9 gives a stable, readable number.
 FPS_SMOOTHING = 0.9
+
+# --- Benchmarking ---
+WARMUP_SECONDS = 3
+
+MIN_BENCHMARK_SAMPLES = 10
 
 
 def get_camera_backend() -> int:
@@ -101,12 +86,23 @@ def select_camera(available_cameras: list[int]) -> int:
         print("Invalid choice. Please enter one of the listed numbers.")
 
 
-def initialize_camera(camera_index: int, width: int, height: int) -> cv2.VideoCapture:
+def initialize_camera(camera_index: int, width: int, height: int) -> tuple[cv2.VideoCapture, int, int]:
     """
     Open the requested camera and configure its resolution.
 
+    Cameras don't always support the exact resolution requested, so the
+    actual negotiated resolution is read back once here (not re-queried
+    every frame) and returned alongside the capture object, so callers
+    — including the benchmark summary — can report what was actually
+    used rather than assuming the request was honored.
+
     Raises RuntimeError if the camera cannot be opened, so the caller
     can decide how to handle/report the failure.
+
+    Returns (cap, actual_width, actual_height). If the camera reports
+    an invalid/zero resolution (rare, but possible with some drivers),
+    width/height fall back to 0 rather than crashing; callers should
+    treat 0 as "unavailable" when displaying it.
     """
     backend = get_camera_backend()
     cap = cv2.VideoCapture(camera_index, backend)
@@ -117,11 +113,19 @@ def initialize_camera(camera_index: int, width: int, height: int) -> cv2.VideoCa
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-    actual_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    actual_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    try:
+        actual_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        actual_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    except (cv2.error, TypeError, ValueError):
+        actual_width, actual_height = 0, 0
+
+    if actual_width <= 0 or actual_height <= 0:
+        print("Warning: could not read actual camera resolution from the device.")
+        actual_width, actual_height = 0, 0
+
     print(f"Camera resolution: {actual_width}x{actual_height}")
 
-    return cap
+    return cap, actual_width, actual_height
 
 
 def load_model(model_name: str) -> YOLO:
@@ -219,14 +223,18 @@ def process_frame(model: YOLO, frame) -> tuple[Results, float]:
     return results[0], inference_ms
 
 
-def calculate_fps(prev_time: float, smoothed_fps: Optional[float]) -> tuple[float, float]:
+def calculate_fps(prev_time: float, smoothed_fps: Optional[float]) -> tuple[float, float, float]:
     """
-    Compute a smoothed FPS value using an exponential moving average,
-    which is far more readable on screen than the raw per-frame FPS
-    (which can jump around a lot frame to frame).
+    Compute both a smoothed FPS (for the on-screen display, which reads
+    better when it isn't jumping around every frame) and the raw
+    per-frame instant FPS (used for benchmark statistics, where
+    smoothing would distort the true min/max).
 
-    Returns (current_time, smoothed_fps) — call again next frame with
-    these as the new prev_time/smoothed_fps.
+    Guards against divide-by-zero if two frames report the same
+    timestamp (can happen on very fast frames on some systems).
+
+    Returns (current_time, smoothed_fps, instant_fps) — call again next
+    frame with current_time/smoothed_fps as the new prev_time/smoothed_fps.
     """
     current_time = time.time()
     elapsed = current_time - prev_time
@@ -237,7 +245,7 @@ def calculate_fps(prev_time: float, smoothed_fps: Optional[float]) -> tuple[floa
     else:
         smoothed_fps = FPS_SMOOTHING * smoothed_fps + (1 - FPS_SMOOTHING) * instant_fps
 
-    return current_time, smoothed_fps
+    return current_time, smoothed_fps, instant_fps
 
 
 def draw_overlay(frame, fps: float, inference_ms: float) -> None:
@@ -262,16 +270,100 @@ def draw_overlay(frame, fps: float, inference_ms: float) -> None:
     )
 
 
-def run_detection_loop(model: YOLO, cap: cv2.VideoCapture) -> None:
+def format_model_name(model_name: str) -> str:
+    """Turn a weights filename like 'yolov8n.pt' into a readable label
+    like 'YOLOv8n' for display in the benchmark summary."""
+    base = model_name.removesuffix(".pt")
+    if base.lower().startswith("yolov8"):
+        return "YOLOv8" + base[len("yolov8"):]
+    return base
+
+
+def print_benchmark_summary(
+    frames_tested: int,
+    test_duration: float,
+    fps_samples: list[float],
+    inference_samples: list[float],
+    actual_width: int,
+    actual_height: int,
+) -> None:
+    """
+    Print a clean, copy-paste-ready performance summary to the terminal.
+
+    Only called after the user quits (Q pressed) or the app exits.
+    Uses only real measurements collected after the warm-up period —
+    nothing here is estimated or hardcoded. If too few samples were
+    collected (e.g. the app was closed during warm-up), a clear
+    message is printed instead of misleading statistics.
+
+    Reports both the REQUESTED resolution (FRAME_WIDTH x FRAME_HEIGHT
+    from config) and the ACTUAL resolution the camera negotiated
+    (actual_width x actual_height from initialize_camera), since a
+    webcam may not support the exact resolution requested.
+    """
+    print("\n" + "=" * 50)
+    print("           YOLO PERFORMANCE SUMMARY")
+    print("=" * 50 + "\n")
+
+    if frames_tested < MIN_BENCHMARK_SAMPLES or not fps_samples or not inference_samples:
+        print("Not enough benchmark data collected.")
+        print("(Try running for longer than the warm-up period before quitting.)\n")
+        print("=" * 50)
+        return
+
+    actual_resolution = (
+        f"{actual_width}x{actual_height}" if actual_width > 0 and actual_height > 0 else "Unavailable"
+    )
+
+    print(f"Model                : {format_model_name(MODEL_NAME)}")
+    print(f"Requested Resolution : {FRAME_WIDTH}x{FRAME_HEIGHT}")
+    print(f"Actual Resolution    : {actual_resolution}")
+    print(f"Frames Tested        : {frames_tested}")
+    print(f"Test Duration        : {test_duration:.1f} seconds\n")
+
+    print(f"Average FPS          : {statistics.mean(fps_samples):.2f} FPS")
+    print(f"Min FPS              : {min(fps_samples):.2f} FPS")
+    print(f"Max FPS              : {max(fps_samples):.2f} FPS\n")
+
+    print(f"Average Inference    : {statistics.mean(inference_samples):.2f} ms")
+    print(f"Min Inference        : {min(inference_samples):.2f} ms")
+    print(f"Max Inference        : {max(inference_samples):.2f} ms\n")
+
+    print(f"Confidence           : {CONFIDENCE_THRESHOLD:.2f}")
+    print(f"IoU Threshold        : {IOU_THRESHOLD:.2f}")
+    print("\n" + "=" * 50)
+
+
+def run_detection_loop(model: YOLO, cap: cv2.VideoCapture) -> tuple[int, float, list[float], list[float]]:
     """
     Main capture-detect-display loop. Reads frames until the user
     presses 'Q' or the camera stops providing frames.
+
+    Also runs the benchmarking logic on top of normal detection:
+    - The first WARMUP_SECONDS are excluded from statistics (model
+      warm-up / camera auto-exposure settling).
+    - After warm-up, every frame's instant FPS and inference time
+      are recorded.
+
+    Returns the collected (benchmark_frames, test_duration, fps_samples,
+    inference_samples) so the caller can print the summary AFTER the
+    camera is released and windows are destroyed, per the required
+    shutdown order: stop loop -> release camera -> destroy windows ->
+    print benchmark summary.
     """
     window_name = "YOLO Object Detection - Press Q to Quit"
     prev_time = time.time()
     smoothed_fps: Optional[float] = None
     consecutive_failures = 0
     max_consecutive_failures = 10  # tolerate brief glitches, not a dead camera
+
+    # --- Benchmark state ---
+    loop_start_time = time.time()
+    warmup_announced = False
+    benchmark_start_time: Optional[float] = None
+    benchmark_frames = 0
+    fps_samples: list[float] = []
+    inference_samples: list[float] = []
 
     while True:
         ret, frame = cap.read()
@@ -288,14 +380,32 @@ def run_detection_loop(model: YOLO, cap: cv2.VideoCapture) -> None:
         result, inference_ms = process_frame(model, frame)
         draw_detections(frame, result, model.names)
 
-        prev_time, smoothed_fps = calculate_fps(prev_time, smoothed_fps)
-        draw_overlay(frame, smoothed_fps, inference_ms)
+        prev_time, smoothed_fps, instant_fps = calculate_fps(prev_time, smoothed_fps)
+        draw_overlay(frame, smoothed_fps, inference_ms)  # on-screen display unchanged
+
+        # --- Warm-up / benchmark data collection ---
+        # Only start recording once WARMUP_SECONDS have elapsed since
+        # the loop began, so startup/model-warm-up effects don't skew
+        # the results.
+        if time.time() - loop_start_time >= WARMUP_SECONDS:
+            if not warmup_announced:
+                print(f"Warm-up complete ({WARMUP_SECONDS}s). Benchmark started.")
+                warmup_announced = True
+                benchmark_start_time = time.time()
+
+            if instant_fps > 0:  # guard against a stray zero/invalid reading
+                fps_samples.append(instant_fps)
+            inference_samples.append(inference_ms)
+            benchmark_frames += 1
 
         cv2.imshow(window_name, frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             print("Quit key pressed. Closing application.")
             break
+
+    test_duration = (time.time() - benchmark_start_time) if benchmark_start_time else 0.0
+    return benchmark_frames, test_duration, fps_samples, inference_samples
 
 
 def main() -> None:
@@ -318,19 +428,20 @@ def main() -> None:
         camera_index = select_camera(available_cameras)
 
     try:
-        cap = initialize_camera(camera_index, FRAME_WIDTH, FRAME_HEIGHT)
+        cap, actual_width, actual_height = initialize_camera(camera_index, FRAME_WIDTH, FRAME_HEIGHT)
     except RuntimeError as exc:
         print(f"Error: {exc}")
         sys.exit(1)
 
     print("Starting object detection. Press 'Q' to quit.")
+    benchmark_data = (0, 0.0, [], [])
     try:
-        run_detection_loop(model, cap)
+        benchmark_data = run_detection_loop(model, cap)
     finally:
-        # Always release the camera and close windows, even if the
-        # loop exits due to an unexpected error.
         cap.release()
         cv2.destroyAllWindows()
+
+    print_benchmark_summary(*benchmark_data, actual_width, actual_height)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,392 @@
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8n.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@4.139] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@4.142] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@4.144] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 640x480
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8n
+Requested Resolution : 640x480
+Actual Resolution    : 640x480
+Frames Tested        : 236
+Test Duration        : 25.1 seconds
+
+Average FPS          : 9.41 FPS
+Min FPS              : 4.28 FPS
+Max FPS              : 10.01 FPS
+
+Average Inference    : 103.18 ms
+Min Inference        : 96.04 ms
+Max Inference        : 230.51 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8n.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@5.046] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@5.049] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@5.051] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 1280x720
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8n
+Requested Resolution : 1280x720
+Actual Resolution    : 1280x720
+Frames Tested        : 245
+Test Duration        : 24.4 seconds
+
+Average FPS          : 10.05 FPS
+Min FPS              : 5.11 FPS
+Max FPS              : 11.57 FPS
+
+Average Inference    : 85.57 ms
+Min Inference        : 79.08 ms
+Max Inference        : 123.11 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8s.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@6.560] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.568] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.570] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 640x480
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8s
+Requested Resolution : 640x480
+Actual Resolution    : 640x480
+Frames Tested        : 99
+Test Duration        : 26.6 seconds
+
+Average FPS          : 3.74 FPS
+Min FPS              : 0.30 FPS
+Max FPS              : 4.29 FPS
+
+Average Inference    : 293.31 ms
+Min Inference        : 229.97 ms
+Max Inference        : 3005.44 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8s.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@6.646] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.653] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.656] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 1280x720
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8s
+Requested Resolution : 1280x720
+Actual Resolution    : 1280x720
+Frames Tested        : 128
+Test Duration        : 26.6 seconds
+
+Average FPS          : 4.81 FPS
+Min FPS              : 0.27 FPS
+Max FPS              : 5.21 FPS
+
+Average Inference    : 225.47 ms
+Min Inference        : 186.39 ms
+Max Inference        : 3093.40 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8m.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@6.586] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.588] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.591] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 640x480
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8m
+Requested Resolution : 640x480
+Actual Resolution    : 640x480
+Frames Tested        : 50
+Test Duration        : 28.9 seconds
+
+Average FPS          : 1.67 FPS
+Min FPS              : 0.27 FPS
+Max FPS              : 1.83 FPS
+
+Average Inference    : 641.53 ms
+Min Inference        : 542.23 ms
+Max Inference        : 3433.89 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8m.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@5.779] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@5.782] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@5.784] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 1280x720
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8m
+Requested Resolution : 1280x720
+Actual Resolution    : 1280x720
+Frames Tested        : 53
+Test Duration        : 24.8 seconds
+
+Average FPS          : 2.07 FPS
+Min FPS              : 0.26 FPS
+Max FPS              : 2.25 FPS
+
+Average Inference    : 522.13 ms
+Min Inference        : 438.25 ms
+Max Inference        : 3269.66 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8l.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@6.905] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.913] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.916] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 640x480
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8l
+Requested Resolution : 640x480
+Actual Resolution    : 640x480
+Frames Tested        : 22
+Test Duration        : 23.8 seconds
+
+Average FPS          : 0.86 FPS
+Min FPS              : 0.25 FPS
+Max FPS              : 0.95 FPS
+
+Average Inference    : 1248.00 ms
+Min Inference        : 1052.63 ms
+Max Inference        : 3736.51 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8l.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@6.189] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.192] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@6.194] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 1280x720
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8l
+Requested Resolution : 1280x720
+Actual Resolution    : 1280x720
+Frames Tested        : 25
+Test Duration        : 23.0 seconds
+
+Average FPS          : 1.02 FPS
+Min FPS              : 0.24 FPS
+Max FPS              : 1.13 FPS
+
+Average Inference    : 1055.57 ms
+Min Inference        : 878.50 ms
+Max Inference        : 3648.40 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8x.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@7.112] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@7.116] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@7.119] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 640x480
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8x
+Requested Resolution : 640x480
+Actual Resolution    : 640x480
+Frames Tested        : 21
+Test Duration        : 33.3 seconds
+
+Average FPS          : 0.58 FPS
+Min FPS              : 0.22 FPS
+Max FPS              : 0.61 FPS
+
+Average Inference    : 1783.53 ms
+Min Inference        : 1628.76 ms
+Max Inference        : 4207.38 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
+PS B:\yolo-object-detection\yolo-object-detection> & C:\Users\cheta\AppData\Local\Python\pythoncore-3.14-64\python.exe b:/yolo-object-detection/yolo-object-detection/src/object_detection.py
+Loading model 'yolov8x.pt' (auto-downloads on first use)...
+Model loaded.
+[ WARN:0@4.068] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@4.072] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+[ WARN:0@4.074] global cap.cpp:477 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+
+Available cameras:
+  0: Laptop webcam (usually index 0)
+  1: External/other camera (index 1)
+
+Enter camera index to use [0, 1]: 1
+Camera resolution: 1280x720
+Starting object detection. Press 'Q' to quit.
+Warm-up complete (3s). Benchmark started.
+Quit key pressed. Closing application.
+
+==================================================
+           YOLO PERFORMANCE SUMMARY
+==================================================
+
+Model                : YOLOv8x
+Requested Resolution : 1280x720
+Actual Resolution    : 1280x720
+Frames Tested        : 27
+Test Duration        : 35.4 seconds
+
+Average FPS          : 0.72 FPS
+Min FPS              : 0.25 FPS
+Max FPS              : 0.75 FPS
+
+Average Inference    : 1430.70 ms
+Min Inference        : 1334.66 ms
+Max Inference        : 3437.20 ms
+
+Confidence           : 0.40
+IoU Threshold        : 0.45
+
+==================================================
