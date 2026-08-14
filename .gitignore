@@ -1,0 +1,22 @@
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# YOLO model weights (auto-downloaded on first run — no need to commit)
+*.pt
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# VS Code settings (optional — remove this line if you want to share your settings)
+.vscode/
+
+# Ultralytics runs/logs (created automatically during training/validation, not used here but ignored just in case)
+runs/
