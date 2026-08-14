@@ -20,3 +20,6 @@ Thumbs.db
 
 # Ultralytics runs/logs (created automatically during training/validation, not used here but ignored just in case)
 runs/
+
+# Environment variables / secrets
+.env
