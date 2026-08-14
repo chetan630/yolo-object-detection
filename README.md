@@ -5,7 +5,7 @@
 This project performs real-time object detection using a webcam feed. It combines **OpenCV** for video capture and display with a pretrained **Ultralytics YOLOv8** model for detection. Every detected object is drawn with a bounding box, its class name, and its confidence score, while the app also reports live FPS and per-frame inference time.
 
 <!-- Add a screenshot here once available, e.g.: -->
-<!-- ![Detection preview](demo/detection_preview.png) -->
+<!-- ![Detection preview](demo/detection_preview.png) --> — see [demo folder](demo/) for screenshot
 
 ## Features
 
@@ -54,7 +54,13 @@ yolo-object-detection/
 └── README.md
 ```
 
-`yolov8s.pt` (the model weights file) is **not** committed to this repo — Ultralytics downloads it automatically the first time the script runs.
+Key project files:
+- **Main Application:** [src/object_detection.py](src/object_detection.py)
+- **Dependencies:** [requirements.txt](requirements.txt)
+- **Demo Folder:** [demo/](demo/) (includes optional video and screenshot)
+- **Configuration:** [.gitignore](.gitignore)
+
+Model weight files (`yolov8n.pt`, `yolov8s.pt`, `yolov8m.pt`, `yolov8l.pt`, `yolov8x.pt`) are **not** committed to this repo — Ultralytics downloads them automatically the first time the script runs.
 
 ## Requirements
 
@@ -75,13 +81,13 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # 3. Install dependencies
-pip install -r requirements.txt
+pip install -r [requirements.txt](requirements.txt)
 ```
 
 ## Running
 
 ```bash
-python src/object_detection.py
+python [src/object_detection.py](src/object_detection.py)
 ```
 
 On first run:
@@ -97,11 +103,11 @@ On first run:
 
 ## Configuration
 
-All key parameters are defined as constants near the top of `src/object_detection.py`:
+All key parameters are defined as constants near the top of [src/object_detection.py](src/object_detection.py):
 
 | Variable | Purpose | Default |
 |---|---|---|
-| `MODEL_NAME` | Which YOLOv8 weights file to load | `"yolov8s.pt"` |
+| `MODEL_NAME` | Which YOLOv8 weights file to load | `"[yolov8s.pt](yolov8s.pt)"` |
 | `CONFIDENCE_THRESHOLD` | Minimum confidence required to display a detection | `0.4` |
 | `IOU_THRESHOLD` | Overlap threshold used by Non-Max Suppression to remove duplicate boxes | `0.45` |
 | `FRAME_WIDTH` / `FRAME_HEIGHT` | Requested webcam capture resolution | `1280` / `720` |
@@ -146,12 +152,12 @@ Overall, the results demonstrate that **YOLOv8n provides the best real-time perf
 
 To reproduce or extend the benchmark:
 
-1. Change `MODEL_NAME` in `src/object_detection.py`.
+1. Change `MODEL_NAME` in [src/object_detection.py](src/object_detection.py).
 2. Change `FRAME_WIDTH` and `FRAME_HEIGHT` for the desired resolution.
 3. Run:
 
 ```bash
-python src/object_detection.py
+python [src/object_detection.py](src/object_detection.py)
 ```
 
 4. Allow the application to run beyond the **"Warm-up complete"** message.
@@ -191,10 +197,10 @@ python src/object_detection.py
 
 | Issue | Fix |
 |---|---|
-| `ModuleNotFoundError` for `cv2` or `ultralytics` | Re-run `pip install -r requirements.txt` inside the activated virtual environment |
+| `ModuleNotFoundError` for `cv2` or `ultralytics` | Re-run `pip install -r [requirements.txt](requirements.txt)` inside the activated virtual environment |
 | No camera found | Check physical connections; on Windows, check Settings → Privacy → Camera |
 | Webcam not detected / wrong camera opens | Close other apps using the camera (Zoom, Teams, OBS); rerun and check the printed camera list |
-| Low FPS / laggy video | Switch `MODEL_NAME` to `"yolov8n.pt"` for faster (but slightly less accurate) inference, or lower `FRAME_WIDTH`/`FRAME_HEIGHT` |
+| Low FPS / laggy video | Switch `MODEL_NAME` to `"[yolov8n.pt](yolov8n.pt)"` for faster (but slightly less accurate) inference, or lower `FRAME_WIDTH`/`FRAME_HEIGHT` |
 | First run fails to start | Requires internet access once, to auto-download the model weights file |
 | Detections seem inaccurate | Ensure good lighting and that the object is one of the 80 COCO classes the model was trained on |
 | Camera disconnects mid-run | The app tolerates a few dropped frames and exits cleanly with a message if the camera stops responding entirely |
@@ -202,4 +208,4 @@ python src/object_detection.py
 ## Notes
 
 - This project intentionally focuses on detection only — no object tracking, custom training, GUI framework, or database, per project scope.
-- Model weights are excluded from version control via `.gitignore` since they are large and downloaded automatically on demand.
+- Model weights are excluded from version control via [.gitignore](.gitignore) since they are large and downloaded automatically on demand.
