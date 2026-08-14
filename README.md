@@ -106,8 +106,6 @@ All key parameters are defined as constants near the top of `src/object_detectio
 | `IOU_THRESHOLD` | Overlap threshold used by Non-Max Suppression to remove duplicate boxes | `0.45` |
 | `FRAME_WIDTH` / `FRAME_HEIGHT` | Requested webcam capture resolution | `1280` / `720` |
 
-These are kept as simple constants rather than a separate config file — the project is small enough that a dedicated config layer would add indirection without meaningful benefit.
-
 ## Performance
 
 Actual FPS and inference time depend on several factors:
@@ -147,7 +145,7 @@ To fill this in: change `MODEL_NAME` and `FRAME_WIDTH`/`FRAME_HEIGHT` in `src/ob
 - Structured performance benchmarking across hardware
 - Deployment on edge devices (e.g. Raspberry Pi, Jetson Nano)
 
-## How Detection Works (for interview reference)
+## How Detection Works
 
 1. Each webcam frame is passed to `model()`, which returns a `Results` object per input frame.
 2. `result.boxes` holds every detection found in that frame.
