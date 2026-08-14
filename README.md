@@ -4,8 +4,7 @@
 
 This project performs real-time object detection using a webcam feed. It combines **OpenCV** for video capture and display with a pretrained **Ultralytics YOLOv8** model for detection. Every detected object is drawn with a bounding box, its class name, and its confidence score, while the app also reports live FPS and per-frame inference time.
 
-<!-- Add a screenshot here once available, e.g.: -->
-<!-- ![Detection preview](demo/detection_preview.png) --> — see [demo folder](demo/) for screenshot
+**Demo files available:** [demo.mp4](demo/demo.mp4) — short demo recording | [detection_preview.png](demo/detection_preview.png) — screenshot | [demo/readme.md](demo/readme.md) — documentation
 
 ## Features
 
